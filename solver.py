@@ -20,21 +20,21 @@ class a_star_node():
 
     def equals(self, node):
         """Check if this state matches node's state"""
-        if self.state.isSameGrid(node.state):
+        if self.state.is_same_grid(node.state):
             return True
         else:
             return False
 
 class tile_puzzle_a_star_node(a_star_node):
     def get_children(self, depth):
-        m = self.state.getLegalMoves()
+        m = self.state.get_legal_moves()
         c = []
         for l in m:
             c.append(tile_puzzle_a_star_node(l, depth))
         return c
     
     def equals(self, node):
-        if self.state.isSameGrid(node.state):
+        if self.state.is_same_grid(node.state):
             return True
         else:
             return False
@@ -51,23 +51,23 @@ class a_star_solver():
         if len(open_list) == 0:
             return
         else:
-            base = open_list[0].hVal
-            # get lowest hVal
+            base = open_list[0].h_val
+            # get lowest h_val
             for x in open_list:
-                if base < x.hVal:
-                    base = x.hVal
+                if base < x.h_val:
+                    base = x.h_val
             for i in open_list:
-                if i.hVal > base:
+                if i.h_val > base:
                     open_list.remove(i)
                     open_list.append(i)
 
     def evaluate(self, board, goal, depth):
-        board.hVal = depth
+        board.h_val = depth
         g = goal.get_state()
         for i in xrange(board.state.size):
             for j in xrange(board.state.size):
                 if board.state.grid[i][j] != g.grid[i][j]:
-                    board.hVal += 1
+                    board.h_val += 1
 
     def a_star(self, start, goal):
         open_list = [start]
@@ -79,10 +79,10 @@ class a_star_solver():
             x = open_list.pop(0)
             #print x.get_state()
             x_state = x.get_state()
-            if x_state.isSameGrid(goal.get_state()):
+            if x.equals(goal):
                 # Return path from start to x
                 print "FOUND IT"
-                x_state.showBoard()
+                x_state.show_board()
                 return x.path
             else:
                 # get a list of x's children 
@@ -102,18 +102,21 @@ class a_star_solver():
                             closed_list.remove(child)
                             open_list.append(child)
                             child_closed.path = c.path + c 
-                            print "Added", child_closed.state.showBoard()
+                            #print "Added", child_closed.state.show_board()
                     else:    
                         self.evaluate(c, goal, depth)
+                        #if depth < c.h_val - depth:
                         open_list.append(c)
-                        print "Added\n", c.state.showBoard()
+                        c.path.append(x)
+                            #print "Added\n", c.state.show_board()
             closed_list.append(x)
+            print "Next child"
             self.sort_open(open_list)
         return ["Derp", "Derp", "Derp"]
 
 def main():
     b = board(3)
-    c = board(b.size, b.copyGrid())
+    c = board(b.size, b.copy_grid())
     c.randomise(50)
     b_node = tile_puzzle_a_star_node(b, 0)
     c_node = tile_puzzle_a_star_node(c, 0)
