@@ -15,21 +15,18 @@ class board():
                 self.grid.append(numbers[size*i:size*i+size])
             print self.grid
             self.blank_pos = (size-1, size-1)
-            print self.grid[self.blank_pos[0]][self.blank_pos[1]]
+            #print self.grid[self.blank_pos[0]][self.blank_pos[1]]
         
         self.blank_pos = self.findblank_pos(self.grid)
         #print "Found blank_pos:", self.findblank_pos(self.grid)
         #print "Actual blank_pos:", self.blank_pos
 
-    #def __init__(self, grid, size):
-        #self.grid = grid
-        #self.size = size
     def findblank_pos(self, grid):
         for i in xrange(len(grid[0])):
             for j in xrange(len(grid)):
                 if grid[i][j] == 0:
                     return (i, j)
-        print "Well done, genius. Couldn't find the blank tile."
+        print "Couldn't find the blank tile."
         return (0, 0)
 
     def copy_grid(self):
@@ -102,7 +99,50 @@ class board():
                 #print ("Can move left from", str(self.blank_pos[0]), 
                     #str(self.blank_pos[1]))
                 return True
-
+    def tiles_out_of_place(self, goal):
+        t = 0
+        for i in xrange(self.size):
+            for j in xrange(self.size):
+                if self.grid[i][j] is not goal.grid[i][j]:
+                    t += 1
+        return t
+        
+    def moves_to_state(self, goal):
+        m = 0
+        tiles = []
+        # Check which tiles are out of place compared to the goal state
+        for i in xrange(self.size):
+            for j in xrange(self.size):
+                if not self.grid[i][j] == goal.grid[i][j]:
+                    tiles.append((i, j, goal.grid[i][j], 0))
+        # Find the Manhattan distance between goal and actual position 
+        # of those tiles and add it to m
+        i_diff = 0
+        j_diff = 0
+        for t in tiles:
+            for i in xrange(self.size):
+                for j in xrange(self.size):
+                    if self.grid[i][j] == t[2]:
+                        if i > t[0]:
+                            i_diff = i - t[0]
+                        else:
+                            i_diff += t[0] - i
+                        if j > t[1]:
+                            j_diff += j - t[1]
+                        else:
+                            j_diff += t[1] - j
+                        """# is this a corner tile?
+                        if ((i == 0 and j == 0) or 
+                                (i == self.size and j == 0) or
+                                (i == 0 and j == self.size) or
+                                (i == self.size and j == self.size)):
+                            m += 1"""
+                        #print i_diff, j_diff
+                        m += i_diff
+                        m += j_diff
+                        #print m
+        return m
+                        
 
     def move_blank(self, direction): # 3: up 2: right 1: down 0: left
         #if self.is_valid_move(direction):
@@ -132,8 +172,8 @@ class board():
             self.grid[bP[0]-1][bP[1]] = 0
             self.blank_pos = (bP[0]-1, bP[1])
         #self.show_board()
-        print bP, "->", self.blank_pos
-        print
+        #print bP, "->", self.blank_pos
+        #print
 
     def randomise(self, iterations):
         num = 0
@@ -151,7 +191,7 @@ def main():
     b.show_board()
     #b.randomise(50)
     c = board(b.size, b.copy_grid())
-    c.show_board()
+    #c.show_board()
     print c.is_same_grid(b)
     print c.get_legal_moves()
 
