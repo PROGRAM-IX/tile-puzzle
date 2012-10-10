@@ -177,6 +177,7 @@ class board():
 
     def randomise(self, iterations):
         num = 0
+        print "Randomising:", iterations, "iterations"
         while num < iterations:
             direction = random.randint(0, 4)
             if self.is_valid_move(direction):
@@ -184,14 +185,13 @@ class board():
                 num += 1
                 #print num
 
-    #def solve(self, bP):
-
 def main():
+    # Test the board class
     b = board(3)
     b.show_board()
-    #b.randomise(50)
+    b.randomise(50)
     c = board(b.size, b.copy_grid())
-    #c.show_board()
+    c.show_board()
     print c.is_same_grid(b)
     print c.get_legal_moves()
 

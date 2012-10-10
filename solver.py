@@ -1,3 +1,5 @@
+import sys
+import getopt
 from board import *
 
 class a_star_node():
@@ -84,14 +86,17 @@ class a_star_solver():
         out_of_place = start.get_state().tiles_out_of_place(
                 goal.get_state())
         print "Tiles out of place:", out_of_place
-        print "Isolated moves from goal state:", start.get_state().moves_to_state(goal.get_state())
+        print "Isolated moves from goal state:", (
+        start.get_state().moves_to_state(goal.get_state()))
         closed_list = []
         depth = 0
         count = 0
         while len(open_list) > 0:
             #print open_list[0].get_state()
             x = open_list.pop(0)
-            depth = len(x.path) + 1
+            if len(x.path) > depth:
+                depth = len(x.path)
+                print depth
             #print x.get_state()
             #x_state = x.get_state()
             if x.equals(goal):
@@ -109,20 +114,22 @@ class a_star_solver():
                     child_closed = self.state_in_list(c, closed_list)
                     # if c is already in open_list
                     if child_open is not None:
-                        # if c's path < child's path
+                        # if child's path < c's path
                         if len(child_open.path) < len(c.path):
                             # give child c's path
                             child_open.path = c.path 
+                    # if child is already in closed_list
                     elif child_closed is not None:
+                        # if child's path < c's path
                         if len(child_closed.path) < len(c.path):
+                            # take child off closed list
                             closed_list.remove(child_closed)
+                            # add child to open list
                             open_list.append(child_closed)
-                            #child_closed.path.extend(c.path)
-                            #child_closed.path.append(c)
                             #print "Added", child_closed.state.show_board()
                     else:    
                         self.evaluate(c, goal, depth)
-                        print depth
+                        #print depth
                         #if depth < c.h_val - depth:
                             #print "Added\n", c.state.show_board()
                         open_list.append(c)
@@ -136,17 +143,39 @@ class a_star_solver():
                         #print depth
                         #print c.path
             closed_list.append(x)
-            #print "Next child"
             # v Work on this - need to prune somehow
             #self.remove_non_optimal(open_list, depth)
             self.sort_open(open_list)
-        print "DERP"
+        print "Did not find solution"
         return None
 
 def main():
-    b = board(3)
+    #print sys.argv
+    if len(sys.argv) > 1:
+        if str.isdigit(sys.argv[1]) and sys.argv[1] > 1:
+            size = int(sys.argv[1])
+            print "Size:", size
+        else:
+            print "Usage: python solver.py <board size> <random iterations>"
+            size = 2
+            print "Size:", size
+    else:
+        size = 2
+        print "Size:", size
+    if len(sys.argv) > 2:
+        if str.isdigit(sys.argv[2]) and sys.argv[2] >= 0:
+            random_iter = int(sys.argv[2])
+            print "Random iterations:", random_iter
+        else:
+            print "Usage: python solver.py <board size> <random iterations>"
+            random_iter = 5
+            print "Random iterations:", random_iter
+    else:
+        random_iter = 5
+        print "Random iterations:", random_iter
+    b = board(size)
     c = board(b.size, b.copy_grid())
-    c.randomise(5)
+    c.randomise(random_iter)
     b_node = tile_puzzle_a_star_node(b, 0)
     c_node = tile_puzzle_a_star_node(c, 0)
     print "start:", b_node
@@ -155,7 +184,8 @@ def main():
     steps = solver.a_star(c_node, b_node)
     for step in steps:
         step.show_state()
-    print "Did it in", len(steps), "moves."
+    # steps includes the goal as well so -1 is the moves
+    print "Did it in", len(steps)-1, "moves."
     
 
 if __name__ == "__main__":
