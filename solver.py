@@ -176,10 +176,10 @@ def main():
             print "Size:", size
         else:
             print "Usage: python solver.py <board size> <random iterations>"
-            size = 2
+            size = 3
             print "Size:", size
     else:
-        size = 2
+        size = 3
         print "Size:", size
     if len(sys.argv) > 2:
         if str.isdigit(sys.argv[2]) and sys.argv[2] >= 0:
@@ -187,10 +187,10 @@ def main():
             print "Random iterations:", random_iter
         else:
             print "Usage: python solver.py <board size> <random iterations>"
-            random_iter = 5
+            random_iter = 15
             print "Random iterations:", random_iter
     else:
-        random_iter = 5
+        random_iter = 15
         print "Random iterations:", random_iter
     b = board(size)
     c = board(b.size, b.copy_grid())
