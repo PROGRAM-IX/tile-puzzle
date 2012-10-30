@@ -22,7 +22,7 @@ import random
 class board():
     def __init__(self, size, grid=None):
         self.size = size
-        if grid != None:
+        if not grid == None:
             self.grid = grid
         else:
             self.grid = []
@@ -67,11 +67,11 @@ class board():
         return moves
 
     def is_same_grid(self, board):
-        if self.size != board.size:
+        if not self.size == board.size:
             return False
         for i in xrange(0, self.size):
             for j in xrange(0, self.size):
-                if self.grid[i][j] != board.grid[i][j]:
+                if not self.grid[i][j] == board.grid[i][j]:
                     return False
         return True
 

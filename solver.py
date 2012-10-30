@@ -25,7 +25,7 @@ class a_star_node():
     def __init__(self, state, h_val, path=None):
         self.state = state
         self.h_val = h_val
-        if path != None:
+        if not path == None:
             self.path = path
         self.path = []
 
