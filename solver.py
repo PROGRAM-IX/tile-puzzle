@@ -122,6 +122,7 @@ class a_star_solver():
                 # Return path from start to x
                 print "Found it after", depth, "moves"
                 print "Total children added to open list:", count
+                print ""
                 x.show_state()
                 return x.path + [x]
             else:
