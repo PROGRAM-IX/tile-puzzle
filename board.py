@@ -32,7 +32,7 @@ class board():
             #print numbers
             for i in xrange(0, size):
                 self.grid.append(numbers[size*i:size*i+size])
-            print self.grid
+            #print self.grid
             self.blank_pos = (size-1, size-1)
             #print self.grid[self.blank_pos[0]][self.blank_pos[1]]
         

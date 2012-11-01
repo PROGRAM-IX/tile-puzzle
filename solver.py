@@ -197,8 +197,8 @@ def main():
     c.randomise(random_iter)
     b_node = tile_puzzle_a_star_node(b, 0)
     c_node = tile_puzzle_a_star_node(c, 0)
-    print "start:", b_node
-    print "goal:", c_node
+    #print "start:", b_node
+    #print "goal:", c_node
     solver = a_star_solver()
     steps = solver.a_star(c_node, b_node)
     for step in steps:
