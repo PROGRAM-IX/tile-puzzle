@@ -36,11 +36,11 @@ class board():
             self.blank_pos = (size-1, size-1)
             #print self.grid[self.blank_pos[0]][self.blank_pos[1]]
         
-        self.blank_pos = self.findblank_pos(self.grid)
+        self.blank_pos = self.find_blank_pos(self.grid)
         #print "Found blank_pos:", self.findblank_pos(self.grid)
         #print "Actual blank_pos:", self.blank_pos
 
-    def findblank_pos(self, grid):
+    def find_blank_pos(self, grid):
         for i in xrange(len(grid[0])):
             for j in xrange(len(grid)):
                 if grid[i][j] == 0:
@@ -118,6 +118,7 @@ class board():
                 #print ("Can move left from", str(self.blank_pos[0]), 
                     #str(self.blank_pos[1]))
                 return True
+
     def tiles_out_of_place(self, goal):
         t = 0
         for i in xrange(self.size):
@@ -126,6 +127,10 @@ class board():
                     t += 1
         return t
         
+    def set_grid(self, grid):
+        self.grid = grid
+        self.blank_pos = self.find_blank_pos(grid)
+
     def moves_to_state(self, goal):
         m = 0
         tiles = []
@@ -196,13 +201,22 @@ class board():
 
     def randomise(self, iterations):
         num = 0
+        states = [] # keep track of moves made
+        state_done = False # whether currently considered move has been made
         print "Randomising:", iterations, "iterations"
         while num < iterations:
-            direction = random.randint(0, 4)
-            if self.is_valid_move(direction):
-                self.move_blank(direction)
+            state_done = False 
+            move = random.choice(self.get_legal_moves()) # get random move 
+            # can just use get_legal_moves here
+            for s in states: # step through states
+                if move.is_same_grid(s): # has this move been made?
+                    num = states.index(s) # reset num to that index
+                    state_done = True # set flag 
+            if not state_done: 
+                states.append(move)
+                self.set_grid(move.grid)
                 num += 1
-                #print num
+            print num
 
 def main():
     # Test the board class
