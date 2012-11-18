@@ -206,17 +206,20 @@ class board():
         print "Randomising:", iterations, "iterations"
         while num < iterations:
             state_done = False 
-            move = random.choice(self.get_legal_moves()) # get random move 
-            # can just use get_legal_moves here
+            move = random.choice(self.get_legal_moves()) # get random move
+            
             for s in states: # step through states
                 if move.is_same_grid(s): # has this move been made?
-                    num = states.index(s) # reset num to that index
+                    num = states.index(s) + 2 
+                    # can have made a max of two moves since then
                     state_done = True # set flag 
-            if not state_done: 
+            if not state_done:
                 states.append(move)
                 self.set_grid(move.grid)
                 num += 1
             print num
+        for s in states:
+            s.show_board()
 
 def main():
     # Test the board class

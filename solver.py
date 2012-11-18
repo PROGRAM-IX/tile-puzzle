@@ -202,11 +202,12 @@ def main():
     #print "goal:", c_node
     solver = a_star_solver()
     steps = solver.a_star(c_node, b_node)
+    print "--------------"
     for step in steps:
+        print "Step"
         step.show_state()
     # steps includes the goal as well so -1 is the moves
     print "Did it in", len(steps)-1, "moves."
-    
 
 if __name__ == "__main__":
     main()
