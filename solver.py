@@ -189,9 +189,11 @@ def main():
     #print "goal:", c_node
     solver = a_star_solver()
     steps = solver.a_star(c_node, b_node)
+    print "Start state"
+    steps[0].show_state()
     print "--------------"
-    for step in steps:
-        print "Step"
+    steps_less_start = steps[1:] # Don't print the start state
+    for step in steps_less_start:
         step.show_state()
     # steps includes the goal as well so -1 is the moves
     print "Did it in", len(steps)-1, "moves."

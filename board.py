@@ -217,7 +217,7 @@ class board():
                 states.append(move) # Add it to the list of moves made
                 self.set_grid(move.grid) # Set current board state to that
                 num += 1 # Increment number of moves made
-            print num
+            #print num
         for s in states:
             s.show_board()
 
