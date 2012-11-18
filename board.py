@@ -201,21 +201,22 @@ class board():
 
     def randomise(self, iterations):
         num = 0
-        states = [] # keep track of moves made
-        state_done = False # whether currently considered move has been made
+        states = [] # Keep track of moves made
+        state_done = False # Whether currently considered move has been made
         print "Randomising:", iterations, "iterations"
         while num < iterations:
             state_done = False 
-            move = random.choice(self.get_legal_moves()) # get random move
-            for s in states: # step through states
-                if move.is_same_grid(s): # has this move been made?
+            move = random.choice(self.get_legal_moves()) # Get random move
+            for s in states: # Step through states
+                if move.is_same_grid(s): # Has this move been made?
                     num = states.index(s) + 2 
-                    # can have made a max of two moves since then
-                    state_done = True # set flag 
+                    # Can have made a max of two moves since then
+                    state_done = True # Set flag 
+            # If this move hasn't been made
             if not state_done:
-                states.append(move)
-                self.set_grid(move.grid)
-                num += 1
+                states.append(move) # Add it to the list of moves made
+                self.set_grid(move.grid) # Set current board state to that
+                num += 1 # Increment number of moves made
             print num
         for s in states:
             s.show_board()
