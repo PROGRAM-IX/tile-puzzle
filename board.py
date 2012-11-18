@@ -207,7 +207,6 @@ class board():
         while num < iterations:
             state_done = False 
             move = random.choice(self.get_legal_moves()) # get random move
-            
             for s in states: # step through states
                 if move.is_same_grid(s): # has this move been made?
                     num = states.index(s) + 2 

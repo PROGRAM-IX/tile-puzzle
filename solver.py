@@ -101,71 +101,58 @@ class a_star_solver():
                 goal.get_state())
 
     def a_star(self, start, goal):
-        open_list = [start]
+        open_list = [start] # Set initial state of open
         out_of_place = start.get_state().tiles_out_of_place(
                 goal.get_state())
         print "Tiles out of place:", out_of_place
         print "Isolated moves from goal state:", (
         start.get_state().moves_to_state(goal.get_state()))
-        closed_list = []
+        closed_list = [] # Set initial state of closed
         depth = 0
         count = 0
-        while len(open_list) > 0:
-            #print open_list[0].get_state()
-            x = open_list.pop(0)
-            if len(x.path) > depth:
+        while len(open_list) > 0: # While the open list has elements
+            x = open_list.pop(0) # Pop the first element (x) off it
+            if len(x.path) > depth: # Keep an eye on the depth
                 depth = len(x.path)
-                print depth
-            #print x.get_state()
-            #x_state = x.get_state()
-            if x.equals(goal):
+                print depth # Print the depth to measure progress
+            if x.equals(goal): # If we've reached the goal state
                 # Return path from start to x
                 print "Found it after", depth, "moves"
                 print "Total children added to open list:", count
                 print ""
-                x.show_state()
                 return x.path + [x]
             else:
-                # get a list of x's children 
+                # Get a list of x's children 
                 children = x.get_children(depth) 
                 for c in children:
-                    # if c is already in the list
+                    # If c is already in one or other of the lists
                     child_open = self.state_in_list(c, open_list)
                     child_closed = self.state_in_list(c, closed_list)
-                    # if c is already in open_list
+                    # If c is already in open_list
                     if child_open is not None:
-                        # if child's path < c's path
+                        # If child's path length < c's path length
                         if len(child_open.path) < len(c.path):
-                            # give child c's path
+                            # Give child c's path
                             child_open.path = c.path 
-                    # if child is already in closed_list
+                    # If child is already in closed_list
                     elif child_closed is not None:
-                        # if child's path < c's path
+                        # If child's path length < c's path length
                         if len(child_closed.path) < len(c.path):
-                            # take child off closed list
+                            # Take child off closed list
                             closed_list.remove(child_closed)
-                            # add child to open list
+                            # Add child to open list
                             open_list.append(child_closed)
-                            #print "Added", child_closed.state.show_board()
+                    # If child isn't in either list
                     else:    
-                        self.evaluate(c, goal, depth)
-                        #print depth
-                        #if depth < c.h_val - depth:
-                            #print "Added\n", c.state.show_board()
-                        open_list.append(c)
-                        count += 1
-                        p = x.path[:]
-                        p.extend(c.path[:])
-                        c.path = p
-                        c.path.append(x)
-                            
-                        #print "appended", x, "to", c, "path"
-                        #print depth
-                        #print c.path
-            closed_list.append(x)
-            # v Work on this - need to prune somehow
-            #self.remove_non_optimal(open_list, depth)
-            self.sort_open(open_list)
+                        self.evaluate(c, goal, depth) # Evaluate child
+                        open_list.append(c) # Add it to the open list
+                        count += 1 
+                        p = x.path[:] # Get x's path
+                        p.extend(c.path[:]) # Add c's path to it
+                        c.path = p # Set c's path to that
+                        c.path.append(x) # Add x to the end of c's path
+            closed_list.append(x) # Add x to the closed list
+            self.sort_open(open_list) # Sort the open list
         print "Did not find solution"
         return None
 
