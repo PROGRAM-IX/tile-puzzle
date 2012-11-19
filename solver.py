@@ -45,6 +45,7 @@ class a_star_node():
     def equals(self, node):
         """Check if this state matches node's state"""
 
+
 class tile_puzzle_a_star_node(a_star_node):
     def get_children(self, depth):
         m = self.state.get_legal_moves()
@@ -95,8 +96,8 @@ class a_star_solver():
 
     def evaluate(self, board, goal, depth):
         board.h_val = depth
-        board.h_val += board.get_state().tiles_out_of_place(
-                goal.get_state())
+        #board.h_val += board.get_state().tiles_out_of_place(
+                #goal.get_state())
         board.h_val += board.get_state().moves_to_state(
                 goal.get_state())
 
