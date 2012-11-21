@@ -207,11 +207,13 @@ class board():
         while num < iterations:
             state_done = False 
             move = random.choice(self.get_legal_moves()) # Get random move
-            for s in states: # Step through states
-                if move.is_same_grid(s): # Has this move been made?
-                    num = states.index(s) + 2 
-                    # Can have made a max of two moves since then
-                    state_done = True # Set flag 
+            if self.size > 2:
+                for s in states: # Step through states
+                    if move.is_same_grid(s): # Has this move been made?
+                        num = states.index(s) + 2 
+                        # Can have made a max of two moves since then
+                        state_done = True # Set flag 
+
             # If this move hasn't been made
             if not state_done:
                 states.append(move) # Add it to the list of moves made

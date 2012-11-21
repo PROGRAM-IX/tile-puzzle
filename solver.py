@@ -97,7 +97,7 @@ class a_star_solver():
     def evaluate(self, board, goal, depth):
         board.h_val = depth
         #board.h_val += board.get_state().tiles_out_of_place(
-                #goal.get_state())
+                #   goal.get_state())
         board.h_val += board.get_state().moves_to_state(
                 goal.get_state())
 
